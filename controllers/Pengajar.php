@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Siswa extends CI_Controller {
+class Pengajar extends CI_Controller {
 
 	function __construct() {
         parent::__construct();
@@ -21,11 +21,11 @@ class Siswa extends CI_Controller {
 		$this->load->library("rumus");
 		$data['hasil'] = $this->rumus->tambah(2, 3);
 
-		$this->load->model("model_siswa");
-		$data['tabelsiswa'] = $this->model_siswa->getdata();
+		$this->load->model("model_pengajar");
+		$data['tabelpengajar'] = $this->model_pengajar->getdata();
 
-		$data['page']="siswa";
-		$data['content']="view_siswa2";
+		$data['page']="pengajar";
+		$data['content']="view_pengajar2";
 		$this->load->view("view_template",$data);
 		
 
@@ -33,23 +33,23 @@ class Siswa extends CI_Controller {
 
 	public function paging($offset=0){
 
-		$this->load->model("model_siswa");
+		$this->load->model("model_pengajar");
 		$this->load->library('pagination');
 
-		$config['base_url'] = site_url("siswa/paging");
-		$config['total_rows'] = $this->model_siswa->total();
+		$config['base_url'] = site_url("pengajar/paging");
+		$config['total_rows'] = $this->model_pengajar->total();
 		$config['per_page'] = 3;
 
 		$this->pagination->initialize($config);
 
-		$data['tabelsiswa'] = $this->model_siswa->getdatapaging($offset,3);
-		$this->load->view("view_paging_siswa",$data);
+		$data['tabelpengajar'] = $this->model_pengajar->getdatapaging($offset,3);
+		$this->load->view("view_paging_pengajar",$data);
 	}
 
 
 	public function add(){
 
-		$this->load->view("view_add_siswa2");
+		$this->load->view("view_add_pengajar2");
 
 	}
 
@@ -78,47 +78,47 @@ class Siswa extends CI_Controller {
         	$foto=$this->upload->data('file_name');  
         }
 
-		$arrsiswa=array(
-			"nis"=>$this->input->post('nis'),
+		$arrpengajar=array(
+			"nip"=>$this->input->post('nip'),
 			"nama"=>$this->input->post('nama'),
 			"alamat"=>$this->input->post('alamat'),
 			"lahir"=>$this->input->post('lahir'),
 			"nilai"=>$this->input->post('nilai'),
 			"foto"=>$foto
 			);
-		$this->load->model("model_siswa");
-		$this->model_siswa->insertdata($arrsiswa);
-		redirect("siswa");
+		$this->load->model("model_pengajar");
+		$this->model_pengajar->insertdata($arrpengajar);
+		redirect("pengajar");
 
 
 	}
 	public function del(){
-		$nis=$this->uri->segment(3);
-		$this->load->model("model_siswa");
-		$this->model_siswa->deldata($nis);
-		redirect("siswa");
+		$nip=$this->uri->segment(3);
+		$this->load->model("model_pengajar");
+		$this->model_pengajar->deldata($nip);
+		redirect("pengajar");
 	}
 	
 	public function edit()
 	{
-		$nis=$this->uri->segment(3);
-		$this->load->model("model_siswa");
-		$data['barissiswa']=$this->model_siswa->selectdata($nis);
-		$this->load->view("view_edit_siswa2",$data);
+		$nip=$this->uri->segment(3);
+		$this->load->model("model_pengajar");
+		$data['barispengajar']=$this->model_pengajar->selectdata($nip);
+		$this->load->view("view_edit_pengajar2",$data);
 	}
 	public function update (){
-		$nis=$this->uri->segment(3);
-		$arrsiswa=array(
-			"nis"=>$this->input->post('nis'),
+		$nip=$this->uri->segment(3);
+		$arrpengajar=array(
+			"nip"=>$this->input->post('nip'),
 			"nama"=>$this->input->post('nama'),
 			"alamat"=>$this->input->post('alamat'),
 			"lahir"=>$this->input->post('lahir'),
 			"nilai"=>$this->input->post('nilai'),
 			"foto"=>$this->input->post('foto')
 			);
-		$this->load->model("model_siswa");
-		$this->model_siswa->updatedata($arrsiswa,$nis);
-		redirect("siswa");
+		$this->load->model("model_pengajar");
+		$this->model_pengajar->updatedata($arrpengajar,$nip);
+		redirect("pengajar");
 
 
 	}

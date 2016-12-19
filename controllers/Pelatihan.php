@@ -19,8 +19,8 @@ function __construct() {
 			}else{
 				$data['tabelpelatihan']= $this->model_pelatihan->caridata($this->input->post("keyword"));
 			}
-			$data['page']="pelatihan";
-			$this->load->view("view_pelatihan",$data);
+			$data['content']="view_pelatihan2";
+			$this->load->view("view_template",$data);
 			
 	}
 	public function paging($offset=0){
@@ -40,7 +40,7 @@ function __construct() {
 
 	public function add(){
 
-		$this->load->view("view_add_pelatihan");
+		$this->load->view("view_add_pelatihan2");
 
 	}
 
@@ -93,18 +93,39 @@ function __construct() {
 		$kode=$this->uri->segment(3);
 		$this->load->model("model_pelatihan");
 		$data['barispelatihan']=$this->model_pelatihan->selectdata($kode);
-		$this->load->view("view_edit_pelatihan",$data);
+		$this->load->view("view_edit_pelatihan2",$data);
 	}
 	public function update (){
 		$kode=$this->uri->segment(3);
+		$config['upload_path']          = './uploads/';
+        $config['allowed_types']        = 'gif|jpg|png';
+        $config['max_size']             = 10000;
+        $config['max_width']            = 10240;
+        $config['max_height']           = 7680;
+
+        $this->load->library('upload', $config);
 		$arrpelatihan=array(
 			"kode"=>$this->input->post('kode'),
 			"judul"=>$this->input->post('judul'),
 			"materi"=>$this->input->post('materi'),
 			"mulai"=>$this->input->post('mulai'),
-			"harga"=>$this->input->post('harga'),
-			"foto"=>$this->input->post('foto')
+			"harga"=>$this->input->post('harga')
 			);
+        if ( ! $this->upload->do_upload('foto'))
+        {
+                // $error = array('error' => $this->upload->display_errors());
+
+                // $this->load->view('upload_form', $error);
+        	//$arrpelatihan['foto']="";
+        }
+        else
+        {
+                // $data = array('upload_data' => $this->upload->data());
+
+                // $this->load->view('upload_success', $data);
+        	$arrpelatihan['foto']=$this->upload->data('file_name');  
+        }
+		
 		$this->load->model("model_pelatihan");
 		$this->model_pelatihan->updatedata($arrpelatihan,$kode);
 		redirect("pelatihan");
