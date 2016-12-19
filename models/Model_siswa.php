@@ -9,10 +9,18 @@ class Model_siswa extends CI_Model {
 		//$hasil = $this->db->get("siswa")->result();
 		//$hasil=$this->db->query("SELECT * FROM siswa")->result();
 		//$hasil=$this->db->query("SELECT * FROM siswa LEFT JOIN pelatihan ON siswa.kode=pelatihan.kode")->result();
-		$this->db->select("*");
+		$this->db->select("siswa.*,pelatihan.judul");
 		$this->db->from("siswa");
 		$this->db->join("pelatihan","siswa.kode = pelatihan.kode","left");
 		$hasil=$this->db->get()->result();
+        return $hasil;
+    }
+
+    public function getdatabykode($kode)
+	{
+		$this->db->where("kode",$kode);
+		$hasil = $this->db->get("siswa")->result();
+		
         return $hasil;
     }
 
